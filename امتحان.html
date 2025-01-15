@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار إلكتروني متقدم</title>
+    <style>
+        body {
+            font-family: 'Tahoma', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2575fc;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 10px;
+            border-left: 4px solid #2575fc;
+            background: #f7f9fc;
+            border-radius: 5px;
+        }
+
+        .question label {
+            display: block;
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .options {
+            margin-left: 20px;
+        }
+
+        .options input {
+            margin-right: 8px;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #2575fc;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #6a11cb;
+        }
+
+        .feedback {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background: #eaf4fc;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>اختبار إلكتروني متقدم</h1>
+        <form id="examForm"></form>
+        <button type="button" class="submit-btn" onclick="submitExam()">إرسال</button>
+        <div id="feedback" class="feedback" style="display: none;"></div>
+    </div>
+
+    <script>
+        const questionsData = [
+            {
+                question: "ما هو تعريف النظام؟",
+                options: [
+                    "شبكة من الإجراءات لتحقيق هدف معين.",
+                    "مجموعة من القوانين فقط.",
+                    "قاعدة بيانات بسيطة."
+                ],
+                answer: "شبكة من الإجراءات لتحقيق هدف معين."
+            },
+            {
+                question: "ما هي لغة البرمجة الأكثر استخدامًا في تطوير المواقع؟",
+                options: [
+                    "JavaScript",
+                    "Python",
+                    "C++"
+                ],
+                answer: "JavaScript"
+            },
+            {
+                question: "ما هي أهمية تحليل النظام؟",
+                options: [
+                    "تحديد الاحتياجات وتحليل البدائل.",
+                    "إضافة وظائف عشوائية.",
+                    "إلغاء الميزات القديمة."
+                ],
+                answer: "تحديد الاحتياجات وتحليل البدائل."
+            },
+            {
+                question: "صح أم خطأ: تحسين أداء النظام يتطلب إعادة تصميمه دائمًا.",
+                options: [
+                    "صح",
+                    "خطأ"
+                ],
+                answer: "خطأ"
+            },
+            {
+                question: "ما هو تعريف قاعدة البيانات؟",
+                options: [
+                    "مكان لتخزين النصوص فقط.",
+                    "نظام لإدارة البيانات بشكل منظم.",
+                    "شبكة من البرامج للتواصل."
+                ],
+                answer: "نظام لإدارة البيانات بشكل منظم."
+            }
+        ];
+
+        const form = document.getElementById('examForm');
+        const answers = {};
+
+        function createQuestions() {
+            questionsData.forEach((data, index) => {
+                const questionNumber = index + 1;
+                answers[`q${questionNumber}`] = data.answer;
+
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+                questionDiv.innerHTML = `
+                    <label for="q${questionNumber}">${questionNumber}. ${data.question}</label>
+                    <div class="options">
+                        ${data.options.map((option, i) => `
+                            <input type="radio" id="q${questionNumber}o${i}" name="q${questionNumber}" value="${option}">
+                            <label for="q${questionNumber}o${i}">${option}</label><br>
+                        `).join('')}
+                    </div>
+                `;
+                form.appendChild(questionDiv);
+            });
+        }
+
+        function submitExam() {
+            const feedbackDiv = document.getElementById('feedback');
+            let feedback = "<h3>نتائجك</h3>";
+            let correctCount = 0;
+
+            questionsData.forEach((data, index) => {
+                const questionNumber = index + 1;
+                const userAnswer = form[`q${questionNumber}`]?.value;
+                if (userAnswer === data.answer) {
+                    correctCount++;
+                } else {
+                    feedback += `<p>السؤال ${questionNumber}: إجابة خاطئة. الإجابة الصحيحة هي: <strong>${data.answer}</strong>.</p>`;
+                }
+            });
+
+            feedback += `<p><strong>درجتك:</strong> ${correctCount} / ${questionsData.length}</p>`;
+            feedbackDiv.innerHTML = feedback;
+            feedbackDiv.style.display = 'block';
+        }
+
+        createQuestions();
+    </script>
+</body>
+</html>
